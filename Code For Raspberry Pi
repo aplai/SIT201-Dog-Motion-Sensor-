@@ -1,0 +1,36 @@
+//Variables
+
+int triggercount = 0;
+volatile bool trigger = 0;
+
+
+void setup() {
+    
+Particle.subscribe("SD1", myHandler, MY_DEVICES);
+Particle.subscribe("Sensor 2D", myHandler, MY_DEVICES);
+
+}
+
+
+void loop() {
+    
+    if (trigger) { // trigger is set TRUE in the event handler
+        for(int i = 0; i < triggercount; i++){
+            
+            Particle.publish("motionsensor","Dog Detected ", PRIVATE);
+            delay(10000);
+        }
+        trigger = 0; // Need to reset the trigger
+        
+    }
+
+
+    
+}
+
+void myHandler(const char *event, const char *data) {
+    String dataVar = data;       // Load data, which is a constant into a string variable
+    triggercount = dataVar.toInt(); // Now we can call a special function which converts the numberic data in the string, to an integer
+    trigger = 1; // Trigger the loop
+
+} 
