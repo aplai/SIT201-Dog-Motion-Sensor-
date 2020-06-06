@@ -1,0 +1,46 @@
+//Variables
+int Sensor1 = D2;
+int Sensor2 = D3;
+int sendCount = 0;
+
+void setup() {      //set up pins
+
+    pinMode(Sensor1, INPUT);
+    pinMode(Sensor2, INPUT);
+
+}
+
+
+
+
+void loop() {
+
+    delay(5000);    //let it delay for 5 seconds 
+  
+
+    // report it out, if the state has changed
+    reportTheData();
+    
+  
+}
+
+
+
+
+
+void reportTheData() {
+    if (digitalRead(Sensor1) == HIGH and digitalRead(Sensor2) == HIGH) {        //if motion is detected run
+        
+       Particle.publish("No Motion Detected", PRIVATE);
+    
+        }
+       else if (digitalRead(Sensor1) == HIGH and digitalRead(Sensor2) == LOW) {                                   //if no motion detected dont run
+        
+          sendCount++; 
+          String dataString = String(sendCount); 
+          Particle.publish("SD1",dataString,60,PRIVATE);
+          
+        }
+    
+    
+}
